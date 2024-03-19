@@ -1,9 +1,7 @@
 <?php
 include('../init/init.php') ; 
 // function for cheack is it admin
-
 admin_login() ; 
-
 // get all daily visits site 
 
 $daily_visit = isset($_COOKIE['daily_views']) ? "{$_COOKIE['daily_views']}" : "1" ; 
@@ -51,7 +49,7 @@ $products = $query->fetchAll(PDO::FETCH_OBJ) ;
     <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->  
+    <!-- endinject -->
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
     <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
@@ -544,7 +542,7 @@ $products = $query->fetchAll(PDO::FETCH_OBJ) ;
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1"> Projects </h4>
+                      <h4 class="card-title mb-1"> popular products </h4>
                       <p class="text-muted mb-1">
 
                       <form action="" method="post" >
@@ -555,35 +553,52 @@ $products = $query->fetchAll(PDO::FETCH_OBJ) ;
                         </select>
                         <button class="btn" > ok  </button>
                       </form>
-
-
                       </p>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="preview-list">
+
+                          <?php foreach( $products as $product ):  ?>
                           <div class="preview-item border-bottom">
                             <div class="preview-thumbnail">
                               <div class="preview-icon bg-primary">
-                                <i class="mdi mdi-file-document"></i>
+                                <img class="mdi mdi-file-document" src=" <?php echo $product->image ; ?> " ></img>
                               </div>
                             </div>
-                          
+                            <div class="preview-item-content d-sm-flex flex-grow">
+                              <div class="flex-grow">
+                                <h6 class="preview-subject"> <?php echo $product->name ?> </h6>
+                                <p class="text-muted mb-0"> <?php echo $product->content ?> </p>
+                              </div>
+                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                                <p class="text-muted"> <?php echo '$' . number_format($product->price) ; ?> </p>
+                                <ul class="text-muted mb-0  " style=" display: ruby ; "  >
 
-                              <?php foreach( $products as $product ):  ?>
-                                <div class="preview-item-content d-sm-flex flex-grow">
-                                <div class="flex-grow">
-                                  <h6 class="preview-subject"> <?php echo $product->name ; ?> </h6>
-                                  <p class="text-muted mb-0"> <?php echo $product->price ?> </p>
-                                </div>
-                                <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                  <p class="text-muted">15 minutes ago</p>
-                                  <p class="text-muted mb-0">30 tasks, 5 issues </p>
-                                </div>
-                                </div>
-                                <?php endforeach ;   ?>
+                                <?php 
+                                        
+                                        $stars = $product->stars ; 
+                                        if(isset($stars))
+                                   {
+                                        if( $stars > 5 )
+                                        {
+                                            $stars = 5 ;
+                                        }
+                                        for( $i = 0 ; $i < $stars ; $i++  )
+                                        {
+                                            echo "<li><i class='fa fa-star ' ></i></li>" ; 
+                                        }
+                                    }
 
-                    
+                                        
+                                        ?>
+                              </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <?php endforeach ; ?>
+
+
                           </div>
                         </div>
                       </div>
