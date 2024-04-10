@@ -53,7 +53,7 @@ https://templatemo.com/tm-571-hexashop
                     </a>
 
                         <ul class="nav" >
-                        <li class="scroll-to-section"><a href="card.php"> Card 🛒 </a></li>
+                        <li class="scroll-to-section"><a href="card.php" target="_blank" > Card 🛒 </a></li>
 
                     </ul>
 

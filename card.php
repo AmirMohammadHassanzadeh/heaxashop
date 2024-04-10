@@ -1,18 +1,20 @@
 <?php
 include("init/init.php") ; 
 
-//Getting the product from the database
+// get products 
+$user =  $_SESSION['user'] ; 
 
-if(isset($_SESSION['product']) and isset($_SESSION['post']))
+$sql = "SELECT * FROM `solds` WHERE customer_id ='$user->ID'" ; 
+$query = $connection->query($sql) ; 
+$products = $query->fetchAll(PDO::FETCH_OBJ) ; 
+
+$count = count($products) ; 
+
+for( $i = 1 ; $i <= $count ; $i++ )
 {
-    $sql ="SELECT * FROM `{$_SESSION['product']}` WHERE ID = {$_SESSION['post']}";
-    $query = $connection->query($sql);
-    $product = $query->fetchAll(PDO::FETCH_OBJ);
-    array_push($mahsoolat, $product[0]);
+  $product_catgory = $products
+   $sql = "SELECT * FROM `` "
 }
-
-print_r($mahsoolat);
-
 
 
 
@@ -39,20 +41,22 @@ height: 100vh !important;
             <div class="row">
 
               <div class="col-lg-7">
-                <h5 class="mb-3"><a href="#!" class="text-body"><i
+                <h5 class="mb-3"><a href="index.php" class="text-body">
+                  <i
                       class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                 <hr>
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                   <div>
                     <p class="mb-1">Shopping cart</p>
-                    <p class="mb-0">You have 4 items in your cart</p>
+                    <p class="mb-0">You have <?php echo $count ; ?> items in your cart</p>
                   </div>
                   <div>
                     <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
                         class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
                   </div>
                 </div>
+
 
                 <div class="card mb-3">
                   <div class="card-body">
