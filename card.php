@@ -8,12 +8,69 @@ $sql = "SELECT * FROM `solds` WHERE customer_id ='$user->ID'" ;
 $query = $connection->query($sql) ; 
 $products = $query->fetchAll(PDO::FETCH_OBJ) ; 
 
-$count = count($products) ; 
+//var_dump($products) ; 
 
-for( $i = 1 ; $i <= $count ; $i++ )
+$count = count($products) ; 
+ 
+ 
+ $mahsoolat = [] ; 
+
+
+
+for( $i = 0 ; $i <= $count-1 ; $i++ )
 {
-  $product_catgory = $products
-   $sql = "SELECT * FROM `` "
+   $product_catgory = $products[$i]->product_catgory  ; 
+
+   $product_id = $products[$i]->product_id ; 
+
+   $sql = "SELECT * FROM `$product_catgory` WHERE ID = '$product_id'  " ; 
+
+   $query = $connection->query($sql) ; 
+
+   $C_product = $query->fetchAll(PDO::FETCH_OBJ) ; 
+
+   array_push( $mahsoolat , $C_product ) ; 
+
+  
+
+}
+
+
+
+
+ //  for product price  /// 
+ function price()
+{
+  global $mahsoolat ; 
+  global $products ; 
+  $ALL_price = 0 ;
+  for( $g = 0 ; $g <= count( $mahsoolat )-1 ; $g++ )
+  {
+     $ALL_price += $mahsoolat[$g][0]->price * $products[$g]->count ;
+     
+  }
+  //var_dump($ALL_price)  ;
+  return number_format($ALL_price) ; 
+}
+
+
+
+if(isset($_GET['status']) and $_GET['status'] == 'delete' and isset($_GET['id']) )
+{
+   $sql = "DELETE  FROM `solds` WHERE ID='{$_GET['id']}' " ; 
+
+   $connection->exec($sql) ; 
+  
+   header("location:http://localhost/heaxashop/card.php"); 
+
+   //header("Refresh: 0 ") ; 
+
+}
+
+if( isset($_POST['send_data']) )
+{
+  $_SESSION['mahsoolat'] = $products ; 
+  $_SESSION['date'] =  date('m/d h:i') ; 
 }
 
 
@@ -57,33 +114,47 @@ height: 100vh !important;
                   </div>
                 </div>
 
-
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex flex-row align-items-center">
+                <?php     
+                
+                for( $i = 0 ; $i <= count( $mahsoolat )-1 ; $i++ )
+                {
+                  $f_price = number_format($mahsoolat[$i][0]->price * $products[$i]->count) ; 
+                  echo
+                  "
+                  <div class='card mb-3'>
+                  <div class='card-body'>
+                    <div class='d-flex justify-content-between'>
+                      <div class='d-flex flex-row align-items-center'>
                         <div>
                           <img
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
-                            class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                            src='{$mahsoolat[$i][0]->image}'
+                            class='img-fluid rounded-3' alt='Shopping item' style='width: 65px;'>
                         </div>
-                        <div class="ms-3">
-                          <h5>Iphone 11 pro</h5>
-                          <p class="small mb-0">256GB, Navy Blue</p>
+                        <div class='ms-3'>
+                          <h5> {$mahsoolat[$i][0]->name} </h5>
+                          <p class='small mb-0'>{$mahsoolat[$i][0]->content}</p>
                         </div>
                       </div>
-                      <div class="d-flex flex-row align-items-center">
-                        <div style="width: 50px;">
-                          <h5 class="fw-normal mb-0">2</h5>
+                      <div class='d-flex flex-row align-items-center'>
+                        <div style='width: 50px;'>
+                          <h5 class='fw-normal mb-0'> {$products[$i]->count  } </h5> 
                         </div>
-                        <div style="width: 80px;">
-                          <h5 class="mb-0">$900</h5>
+                        <div style='width: 80px;'>
+                          <h5 class='mb-0'>{$f_price}</h5>
+                          
                         </div>
-                        <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                        <div class='btn' > <a href='?status=delete&id={$products[$i]->ID}'> 🗑️ </a> </div >
+                        <a href='#!' style='color: #cecece;'><i class='fas fa-trash-alt'></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
+                  ";
+                }
+
+                 ?>
+                  
+
 
 
               </div>
@@ -141,26 +212,28 @@ height: 100vh !important;
 
                     <div class="d-flex justify-content-between">
                       <p class="mb-2">Subtotal</p>
-                      <p class="mb-2">$4798.00</p>
+                      <p class="mb-2"> $.0 </p>
                     </div>
 
                     <div class="d-flex justify-content-between">
                       <p class="mb-2">Shipping</p>
-                      <p class="mb-2">$20.00</p>
+                      <p class="mb-2"> <?php  echo "$" .  price() ; ?>  </p>
                     </div>
 
                     <div class="d-flex justify-content-between mb-4">
                       <p class="mb-2">Total(Incl. taxes)</p>
-                      <p class="mb-2">$4818.00</p>
+                      <p class="mb-2"> <?php  echo "$" .  price() ; ?>  </p>
                     </div>
+                    <form action="" method="post" >
 
-                    <button type="button" class="btn btn-info btn-block btn-lg">
+                    <button name="send_data"  class="btn btn-info btn-block btn-lg">
                       <div class="d-flex justify-content-between">
-                        <span>$4818.00</span>
-                        <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                        <span> <?php  echo "$" .  price() ; ?> </span>
+                        <span>  <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                       </div>
                     </button>
 
+                    </form>
                   </div>
                 </div>
 
@@ -174,3 +247,6 @@ height: 100vh !important;
     </div>
   </div>
 </section>
+<script>
+  <?php   if( isset($_POST['send_data']) ){echo"  alert(' its done ')  " ; } ?>
+</script>

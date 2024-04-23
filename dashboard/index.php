@@ -32,10 +32,49 @@ if(isset($_POST['product']))
   $product = $_POST['product'] ; 
 }
 
-//get papuler products 
+
+//get papuler products
+
 $sql="SELECT * FROM `$product` ORDER BY view DESC  ";
 $query = $connection->query($sql) ; 
 $products = $query->fetchAll(PDO::FETCH_OBJ) ;
+
+
+
+//get products from card.php  
+$c_products = [] ;
+if(isset($_SESSION['mahsoolat']))
+{
+
+$sql = "SELECT * FROM `solds` " ; 
+$query = $connection->query($sql) ; 
+$A_products = $query->fetchAll(PDO::FETCH_OBJ) ; 
+array_push( $c_products , $A_products ) ;
+
+$count = count($A_products) ; 
+
+$mahsoolat=[] ; 
+
+//var_dump($c_products[0][0]->product_catgory) ; die ; 
+ 
+
+for( $i = 0 ; $i <= $count-1 ; $i++ )
+{
+   $product_catgory = $c_products[0][$i]->product_catgory  ; 
+
+   $product_id = $c_products[0][$i]->product_id ; 
+
+   $sql = "SELECT * FROM `$product_catgory` WHERE ID = '$product_id'  " ; 
+
+   $query = $connection->query($sql) ; 
+
+   $C_product = $query->fetchAll(PDO::FETCH_OBJ) ; 
+
+   array_push( $mahsoolat , $C_product ) ; 
+
+}
+}
+
 
 ?>
 
@@ -542,13 +581,13 @@ $products = $query->fetchAll(PDO::FETCH_OBJ) ;
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1"> popular products </h4>
+                      <h4 class="card-title mb-1"> populaujnr products </h4>
                       <p class="text-muted mb-1">
 
                       <form action="" method="post" >
                         <select name="product" id="">
                           <option value="products-men" <?php if($product == "products-men"){ echo "selected" ;  } ?> > Men </option>
-                          <option value="products-womn"  <?php if($product == "products-women"){ echo "selected" ;  } ?> > Women </option>
+                          <option value="products-women"  <?php if($product == "products-women"){ echo "selected" ;  } ?> > Women </option>
                           <option value="products-kid" <?php if($product == "products-kid"){ echo "selected" ;  } ?> > Kid </option>
                         </select>
                         <button class="btn" > ok  </button>
@@ -682,121 +721,49 @@ $products = $query->fetchAll(PDO::FETCH_OBJ) ;
                                 </label>
                               </div>
                             </th>
-                            <th> Client Name </th>
-                            <th> Order No </th>
-                            <th> Product Cost </th>
-                            <th> Project </th>
-                            <th> Payment Mode </th>
-                            <th> Start Date </th>
-                            <th> Payment Status </th>
+                            <th> product Name </th>
+                            <th> price </th>
+                            <th class="text-center"> count </th>
+                            <th class="text-center"> product </th>
+                            <th class="text-center"> Start Date </th>
+                            <th class="text-center"> Customer ID </th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
+                          <?php 
+                          if(isset($mahsoolat))
+                        {
+                          for($l = 0 ; $l <= $count-1 ; $l++ )
+                          {
+                            echo"
+                            <tr>
                             <td>
-                              <div class="form-check form-check-muted m-0">
-                                <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
+                              <div class='form-check form-check-muted m-0'>
+                                <label class='form-check-label'>
+                                  <input type='checkbox' class='form-check-input'>
                                 </label>
                               </div>
                             </td>
                             <td>
-                              <img src="assets/images/faces/face1.jpg" alt="image" />
-                              <span class="pl-2">Henry Klein</span>
+                              <img src='{$mahsoolat[$l][0]->image}' alt='image' />
+                              <span class='pl-2'>{$mahsoolat[$l][0]->name}</span>
                             </td>
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> Dashboard </td>
-                            <td> Credit card </td>
-                            <td> 04 Dec 2019 </td>
+                            <td> {$mahsoolat[$l][0]->price } </td>
+                            <td class='text-center' > {$c_products[0][$l]->count} </td>
+                            <td class='text-center' > {$c_products[0][$l]->product_catgory} </td>
+                            <td class='text-center' >  {$_SESSION['date'] } </td>
+                            <td class='text-center' >  {$c_products[0][$l]->customer_id} </td>
                             <td>
-                              <div class="badge badge-outline-success">Approved</div>
                             </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check form-check-muted m-0">
-                                <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
-                                </label>
-                              </div>
-                            </td>
-                            <td>
-                              <img src="assets/images/faces/face2.jpg" alt="image" />
-                              <span class="pl-2">Estella Bryan</span>
-                            </td>
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> Website </td>
-                            <td> Cash on delivered </td>
-                            <td> 04 Dec 2019 </td>
-                            <td>
-                              <div class="badge badge-outline-warning">Pending</div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check form-check-muted m-0">
-                                <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
-                                </label>
-                              </div>
-                            </td>
-                            <td>
-                              <img src="assets/images/faces/face5.jpg" alt="image" />
-                              <span class="pl-2">Lucy Abbott</span>
-                            </td>
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> App design </td>
-                            <td> Credit card </td>
-                            <td> 04 Dec 2019 </td>
-                            <td>
-                              <div class="badge badge-outline-danger">Rejected</div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check form-check-muted m-0">
-                                <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
-                                </label>
-                              </div>
-                            </td>
-                            <td>
-                              <img src="assets/images/faces/face3.jpg" alt="image" />
-                              <span class="pl-2">Peter Gill</span>
-                            </td>
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> Development </td>
-                            <td> Online Payment </td>
-                            <td> 04 Dec 2019 </td>
-                            <td>
-                              <div class="badge badge-outline-success">Approved</div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check form-check-muted m-0">
-                                <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
-                                </label>
-                              </div>
-                            </td>
-                            <td>
-                              <img src="assets/images/faces/face4.jpg" alt="image" />
-                              <span class="pl-2">Sallie Reyes</span>
-                            </td>
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> Website </td>
-                            <td> Credit card </td>
-                            <td> 04 Dec 2019 </td>
-                            <td>
-                              <div class="badge badge-outline-success">Approved</div>
-                            </td>
-                          </tr>
+                            </tr>
+                            " ; 
+                          }
+                        }
+                          
+                          
+                          
+                          
+                          ?>
                         </tbody>
                       </table>
                     </div>

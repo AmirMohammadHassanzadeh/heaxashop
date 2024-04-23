@@ -2,6 +2,8 @@
 
 include("init/init.php") ; 
 
+$user = $_SESSION['user'] ; 
+
 if(isset( $_GET['post'] ) and isset($_GET['product']) )
 {
     $product_name = $_GET['product'] ; 
@@ -41,6 +43,24 @@ if(  isset($_GET['status']) and $_GET['status'] == "view"  )
 
 
 }
+
+
+
+if( isset( $_GET['status'] ) and  $_GET['status'] == 'addtocard' and isset($_GET['post']) )
+{
+     $product_id = $_GET['post'] ; 
+     $product_catgory = $_GET['product'] ; 
+     $user_id = $user->ID; 
+     $p_count = $_GET['count'] ;
+
+    $sql ="INSERT INTO `solds` (customer_id , product_id , product_catgory , count) VALUES ( '$user_id' , '$product_id' , '$product_catgory' , '$p_count' ) ";
+    $query = $connection->exec($sql) ;  
+    header('location:http://localhost/heaxashop/index.php') ; 
+}
+
+
+
+
 
 
 
@@ -119,7 +139,7 @@ if(  isset($_GET['status']) and $_GET['status'] == "view"  )
                                  
                             <div class="quantity buttons_added">
                                 <form  method="post" >
-                                <input type="button" value="-" class="minus"><input type="number"  step="1" min="1" max="" name="num" value="<?php echo isset($_POST['num'] ) ? "{$_POST['num']}" : "1" ;  ?>" title="Qty" class="input-text qty text" size="4" pattern="" inputmode=""><button type="button" value="+" class="plus"> + </button>
+                                <input type="button" value="-" class="minus"><input type="number"  step="1" min="1" max="10" name="num" value="<?php echo isset($_POST['num'] ) ? "{$_POST['num']}" : "1" ;  ?>" title="Qty" class="input-text qty text" size="4" pattern="" inputmode=""><button type="button" value="+" class="plus"> + </button>
                                 <button> OK </button>
                                 </form>
                             </div>
@@ -130,7 +150,8 @@ if(  isset($_GET['status']) and $_GET['status'] == "view"  )
                     <div class="total">
                         <?php $count = isset($_POST['num']) ? "{$_POST['num']}" : "1" ; ?>
                         <h4>Total:$<?php echo $total_price = number_format($product->price * $count )?></h4>
-                        <div class="main-border-button">   <a href="">    Add To Card   </a>   </div>
+                        <?php $c_product=$_GET['product'] ?>
+                        <div class="main-border-button">   <a href="<?php echo "?status=addtocard&count=$count&product=$c_product&post=" . $product->ID;  ?>">    Add To Card   </a>   </div>
                     </div>
                 </div>
             </div>

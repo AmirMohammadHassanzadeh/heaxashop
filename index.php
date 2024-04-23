@@ -86,7 +86,9 @@ if( isset( $_GET['status'] ) and  $_GET['status'] == 'addtocard' and isset($_GET
      $product_id = $_GET['post'] ; 
      $product_catgory = $_GET['product'] ; 
      $user_id = $user->ID; 
-    $sql ="INSERT INTO `solds` (customer_id , product_id , product_catgory) VALUES ( '$user_id' , '$product_id' , '$product_catgory' ) ";
+     $p_count = $_GET['count'] ;
+
+    $sql ="INSERT INTO `solds` (customer_id , product_id , product_catgory , count) VALUES ( '$user_id' , '$product_id' , '$product_catgory' , '$p_count' ) ";
     $query = $connection->exec($sql) ;  
     header('location:http://localhost/heaxashop/index.php') ; 
 }
@@ -239,7 +241,7 @@ if( isset( $_GET['status'] ) and  $_GET['status'] == 'addtocard' and isset($_GET
                                         <ul>
                                             <li><a href=<?php echo "single-product.php?status=view&post=$product->ID&product=products-men " ;  ?>><i class="fa fa-eye"></i></a></li>
                                             <li><a href="<?php echo'?status=star&product=products-men&post=' . $product->ID ; ?>"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="<?php echo "?status=addtocard&product=products-men&post=" . $product->ID ;  ?>"><i class="fa fa-shopping-cart"></i></a></li>
+                                            <li><a href="<?php echo "?status=addtocard&count=1&product=products-men&post=" . $product->ID;  ?>"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
                                        <img src="<?php  echo $product->image ?>" alt="">
@@ -304,9 +306,9 @@ if( isset( $_GET['status'] ) and  $_GET['status'] == 'addtocard' and isset($_GET
                                 <div class="thumb">
                                     <div class="hover-content">
                                         <ul>
-                                            <li><a href="single-product.html"><i class="fa fa-eye"></i></a></li>
-                                            <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
+                                            <li><a href=<?php echo "single-product.php?status=view&post=$product->ID&product=products-women " ;  ?>><i class="fa fa-eye"></i></a></li>
+                                            <li><a href="<?php echo'?status=star&product=products-women&post=' . $product->ID ; ?>"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="<?php echo "?status=addtocard&count=1&product=products-women&post=" . $product->ID;  ?>"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
                                        <img src="<?php  echo $product->image ?>" alt="">
@@ -371,9 +373,9 @@ if( isset( $_GET['status'] ) and  $_GET['status'] == 'addtocard' and isset($_GET
                                 <div class="thumb">
                                     <div class="hover-content">
                                         <ul>
-                                            <li><a href="single-product.html"><i class="fa fa-eye"></i></a></li>
-                                            <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
+                                        <li><a href=<?php echo "single-product.php?status=view&post=$product->ID&product=products-kid " ;  ?>><i class="fa fa-eye"></i></a></li>
+                                            <li><a href="<?php echo'?status=star&product=products-kid&post=' . $product->ID ; ?>"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="<?php echo "?status=addtocard&count=1&product=products-kid&post=" . $product->ID;  ?>"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
                                        <img src="<?php  echo $product->image ?>" alt="">
